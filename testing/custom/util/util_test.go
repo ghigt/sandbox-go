@@ -27,7 +27,7 @@ func TestLs(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		Mock(c.mock)
+		Custom(c.mock)
 
 		out, err := Ls()
 		if !reflect.DeepEqual(err, c.expErr) {
@@ -51,7 +51,7 @@ func TestPwd(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		Mock(c.mock)
+		Custom(c.mock)
 
 		out, err := Pwd()
 		if !reflect.DeepEqual(err, c.expErr) {

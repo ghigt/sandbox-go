@@ -10,13 +10,12 @@ type Commander interface {
 	Command(string) ([]byte, error)
 }
 
-// RealCommander ...
-type RealCommander struct{}
+type realCommander struct{}
 
-var commander Commander
+var commander Commander = realCommander{}
 
 // Command ...
-func (c RealCommander) Command(command string) ([]byte, error) {
+func (c realCommander) Command(command string) ([]byte, error) {
 	return exec.Command(command).CombinedOutput()
 }
 
@@ -38,6 +37,7 @@ func Pwd() ([]byte, error) {
 	return out, nil
 }
 
-func init() {
-	commander = RealCommander{}
+// Custom ...
+func Custom(c Commander) {
+	commander = c
 }
