@@ -1,40 +1,65 @@
 package util
 
-import "testing"
+import (
+	"errors"
+	"reflect"
+	"testing"
+)
 
-type mockCommander struct{}
+type mockCommander struct {
+	out []byte
+	err error
+}
 
-func (m mockCommander) CombinedOutput(c string) ([]byte, error) {
-	if c == "ls" {
-		return []byte("foo.go\nbar.go\n"), nil
-	}
-	if c == "pwd" {
-		return []byte("/foo/bar"), nil
-	}
-	return []byte{}, nil
+func (m mockCommander) Command(c string) ([]byte, error) {
+	return m.out, m.err
 }
 
 func TestLs(t *testing.T) {
-	Mock(mockCommander{})
-	ls, err := Ls()
-	if err != nil {
-		t.Fatalf("Expect no error got %s", err)
+
+	cases := []struct {
+		mock   mockCommander
+		expOut []byte
+		expErr error
+	}{
+		{mockCommander{[]byte("foo.go\nbar.go\n"), nil}, []byte("foo.go\nbar.go\n"), nil},
+		{mockCommander{nil, errors.New("command not found: ls")}, nil, errors.New("Error ls: command not found: ls")},
 	}
 
-	exp := "foo.go\nbar.go\n"
-	if string(ls) != exp {
-		t.Fatalf("Expected %q got %q", exp, ls)
+	for _, c := range cases {
+		Mock(c.mock)
+
+		out, err := Ls()
+		if !reflect.DeepEqual(err, c.expErr) {
+			t.Fatalf("Expect err to be %q got %q", c.expErr, err)
+		}
+
+		if string(c.expOut) != string(out) {
+			t.Fatalf("Expected %q got %q", string(c.expOut), string(out))
+		}
 	}
 }
 
 func TestPwd(t *testing.T) {
-	pwd, err := Pwd()
-	if err != nil {
-		t.Fatalf("Expect no error got %s", err)
+	cases := []struct {
+		mock   mockCommander
+		expOut []byte
+		expErr error
+	}{
+		{mockCommander{[]byte("/foo/bar"), nil}, []byte("/foo/bar"), nil},
+		{mockCommander{nil, errors.New("command not found")}, nil, errors.New("Error pwd: command not found")},
 	}
 
-	exp := "/foo/bar"
-	if string(pwd) != exp {
-		t.Fatalf("Expected %q got %q", exp, pwd)
+	for _, c := range cases {
+		Mock(c.mock)
+
+		out, err := Pwd()
+		if !reflect.DeepEqual(err, c.expErr) {
+			t.Fatalf("Expect err to be %q got %q", c.expErr, err)
+		}
+
+		if string(c.expOut) != string(out) {
+			t.Fatalf("Expected %q got %q", string(c.expOut), string(out))
+		}
 	}
 }

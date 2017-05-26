@@ -7,7 +7,7 @@ import (
 
 type mockCommander struct{}
 
-func (m mockCommander) CombinedOutput(c string) ([]byte, error) {
+func (m mockCommander) Command(c string) ([]byte, error) {
 	if c == "ls" {
 		return []byte("foo.go\nbar.go\n"), nil
 	}

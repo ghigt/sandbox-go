@@ -18,20 +18,6 @@ func (m MockReleaseInfo) GetLatestReleaseTag(repo string) (string, error) {
 	return m.Tag, nil
 }
 
-// func TestGetReleaseTagMessage(t *testing.T) {
-// 	m := MockReleaseInfo{"v0.1.0", nil}
-//
-// 	exp := "The latest release is \"v0.1.0\""
-// 	msg, err := getReleaseTagMessage(m, "dev/null")
-// 	if err != nil {
-// 		t.Fatalf("Expected err to be nil but it was %s", err)
-// 	}
-//
-// 	if exp != msg {
-// 		t.Fatalf("Expected %q but got %q", exp, msg)
-// 	}
-// }
-
 func TestGetReleaseTagMessage(t *testing.T) {
 	cases := []struct {
 		mock   MockReleaseInfo
@@ -54,3 +40,17 @@ func TestGetReleaseTagMessage(t *testing.T) {
 		}
 	}
 }
+
+// func TestGetReleaseTagMessage(t *testing.T) {
+// 	m := MockReleaseInfo{"v0.1.0", nil}
+//
+// 	exp := "The latest release is \"v0.1.0\""
+// 	msg, err := getReleaseTagMessage(m, "dev/null")
+// 	if err != nil {
+// 		t.Fatalf("Expected err to be nil but it was %s", err)
+// 	}
+//
+// 	if exp != msg {
+// 		t.Fatalf("Expected %q but got %q", exp, msg)
+// 	}
+// }

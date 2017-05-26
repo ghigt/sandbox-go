@@ -1,10 +1,13 @@
 package util
 
-import "os/exec"
+import (
+	"fmt"
+	"os/exec"
+)
 
 // Commander ...
 type Commander interface {
-	CombinedOutput(string) ([]byte, error)
+	Command(string) ([]byte, error)
 }
 
 // RealCommander ...
@@ -12,19 +15,27 @@ type RealCommander struct{}
 
 var commander Commander
 
-// CombinedOutput ...
-func (c RealCommander) CombinedOutput(command string) ([]byte, error) {
+// Command ...
+func (c RealCommander) Command(command string) ([]byte, error) {
 	return exec.Command(command).CombinedOutput()
 }
 
 // Ls ...
 func Ls() ([]byte, error) {
-	return commander.CombinedOutput("ls")
+	out, err := commander.Command("ls")
+	if err != nil {
+		return nil, fmt.Errorf("Error ls: %s", err)
+	}
+	return out, nil
 }
 
 // Pwd ...
 func Pwd() ([]byte, error) {
-	return commander.CombinedOutput("pwd")
+	out, err := commander.Command("pwd")
+	if err != nil {
+		return nil, fmt.Errorf("Error pwd: %s", err)
+	}
+	return out, nil
 }
 
 func init() {
