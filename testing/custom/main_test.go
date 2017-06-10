@@ -1,10 +1,11 @@
 package main
 
 import (
-	"_sandbox/testing/custom/util"
 	"errors"
 	"reflect"
 	"testing"
+
+	"github.com/ghigt/sandbox-go/testing/custom/util"
 )
 
 type command struct {

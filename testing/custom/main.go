@@ -1,9 +1,10 @@
 package main
 
 import (
-	"_sandbox/testing/custom/util"
 	"fmt"
 	"log"
+
+	"github.com/ghigt/sandbox-go/testing/custom/util"
 )
 
 func process() (string, error) {
