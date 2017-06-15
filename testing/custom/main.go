@@ -2,18 +2,18 @@ package main
 
 import (
 	"fmt"
-	"log"
+	"os"
 
-	"github.com/ghigt/sandbox-go/testing/custom/util"
+	"github.com/ghigt/sandbox-go/testing/custom/command"
 )
 
-func process() (string, error) {
-	ls, err := util.Ls()
+func process(c command.Commander) (string, error) {
+	ls, err := command.Ls(c)
 	if err != nil {
 		return "", err
 	}
 
-	pwd, err := util.Pwd()
+	pwd, err := command.Pwd(c)
 	if err != nil {
 		return "", err
 	}
@@ -22,9 +22,11 @@ func process() (string, error) {
 }
 
 func main() {
-	p, err := process()
+	c := command.Command{}
+	p, err := process(c)
 	if err != nil {
-		log.Fatal("Error:", err)
+		fmt.Println("Error:", err)
+		os.Exit(1)
 	}
 	fmt.Println(p)
 }
